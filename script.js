@@ -48,7 +48,15 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
   return section;
 };
-
+const getAddItens = async () => { 
+  const resultComputer = await fetchProducts('computador');
+  const sectionItems = document.querySelector('section.items');
+  resultComputer.results.forEach((resultProduct) => {
+    const productItemElement = createProductItemElement(resultProduct);
+    sectionItems.appendChild(productItemElement);
+  });
+};
+getAddItens();
 /**
  * Função que recupera o ID do produto passado como parâmetro.
  * @param {Element} product - Elemento do produto.
