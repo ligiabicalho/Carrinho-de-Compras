@@ -29,6 +29,34 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
+const removeCartItem = (event) => {
+  const elementCartItem = event.target;
+  elementCartItem.remove();
+};
+
+/**
+ * Função responsável por criar e retornar um item do carrinho.
+ * @param {Object} product - Objeto do produto.
+ * @param {string} product.id - ID do produto.
+ * @param {string} product.title - Título do produto.
+ * @param {string} product.price - Preço do produto.
+ * @returns {Element} Elemento de um item do carrinho.
+ */
+ const createCartItemElement = ({ id, title, price }) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
+  li.addEventListener('click', removeCartItem);
+  return li;
+};
+
+const addCartItem = async (event) => { 
+  const elementId = event.target.parentNode.querySelector('span.item_id');
+  const result = await fetchItem(elementId.innerText);
+  const cartItems = document.querySelector('ol.cart__items');
+  cartItems.appendChild(createCartItemElement(result));
+};
+
 /**
  * Função responsável por criar e retornar o elemento do produto.
  * @param {Object} product - Objeto do produto. 
@@ -50,7 +78,8 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
 
   return section;
 };
-const addItems = async () => { 
+
+const createProductItem = async () => { 
   const resultComputer = await fetchProducts('computador');
   const sectionItems = document.querySelector('section.items');
   resultComputer.results.forEach((product) => {
@@ -58,37 +87,13 @@ const addItems = async () => {
     sectionItems.appendChild(productItemElement);
   });
 };
-addItems();
+createProductItem();
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.
  * @param {Element} product - Elemento do produto.
  * @returns {string} ID do produto.
  */
-const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
-
-/**
- * Função responsável por criar e retornar um item do carrinho.
- * @param {Object} product - Objeto do produto.
- * @param {string} product.id - ID do produto.
- * @param {string} product.title - Título do produto.
- * @param {string} product.price - Preço do produto.
- * @returns {Element} Elemento de um item do carrinho.
- */
-const createCartItemElement = ({ id, title, price }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `ID: ${id} | TITLE: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-};
-const cartItemClickListener = () => true;
-
-const addCartItem = async (event) => { 
-  const elementId = event.target.parentNode.querySelector('span.item_id');
-  const result = await fetchItem(elementId.innerText);
-  const cartItems = document.querySelector('ol.cart__items');
-  cartItems.appendChild(createCartItemElement(result));
-};
+// const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
 window.onload = () => { };
