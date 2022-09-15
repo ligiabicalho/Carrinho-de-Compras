@@ -31,7 +31,13 @@ const createCustomElement = (element, className, innerText) => {
 
 const removeCartItem = (event) => {
   const elementCartItem = event.target;
+  const id = elementCartItem.innerText.split('|')[0].split(':')[1].trim();
   elementCartItem.remove();
+
+  const savedItems = getSavedCartItems();
+  const arrSavedItems = JSON.parse(savedItems);
+  const qmFicou = arrSavedItems.filter((item) => item.id !== id);
+  saveCartItems(qmFicou);
 };
 
 /**
@@ -55,7 +61,22 @@ const addCartItem = async (event) => {
   const result = await fetchItem(elementId.innerText);
   const cartItems = document.querySelector('ol.cart__items');
   cartItems.appendChild(createCartItemElement(result));
+
+  const savedItems = getSavedCartItems();
+  const arrSavedItems = JSON.parse(savedItems);
+  arrSavedItems.push({ id: result.id, title: result.title, price: result.price });
+  saveCartItems(arrSavedItems);
 };
+
+const setCartItemsByLocalStorage = () => {
+  const cartItems = document.querySelector('ol.cart__items');
+  const savedItems = getSavedCartItems();
+  const arrSavedItems = JSON.parse(savedItems);
+  arrSavedItems.forEach((item) => {
+    cartItems.appendChild(createCartItemElement(item));
+  });
+};
+setCartItemsByLocalStorage();
 
 /**
  * Função responsável por criar e retornar o elemento do produto.
