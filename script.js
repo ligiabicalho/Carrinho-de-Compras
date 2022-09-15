@@ -85,8 +85,8 @@ const createCartItemElement = ({ id, title, price }) => {
 const cartItemClickListener = () => true;
 
 const addCartItem = async (event) => { 
-  console.log(event.target);
-  const result = await fetchItem('MLB1341706310');
+  const elementId = event.target.parentNode.querySelector('span.item_id');
+  const result = await fetchItem(elementId.innerText);
   const cartItems = document.querySelector('ol.cart__items');
   cartItems.appendChild(createCartItemElement(result));
 };
