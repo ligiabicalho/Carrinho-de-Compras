@@ -37,6 +37,11 @@ const getSavedCartItem = () => {
   return getSavedItem;
 };
 
+const updateTotalPrice = (totalPrice) => {
+  const price = document.querySelector('p.total-price');
+  price.innerText = `Total: R$${totalPrice.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+};
+
 const removeCartItem = (event) => {
   const elementCartItem = event.target;
   const id = elementCartItem.innerText.split('|')[0].split(':')[1].trim();
@@ -46,6 +51,9 @@ const removeCartItem = (event) => {
   const arrSavedItems = JSON.parse(savedItems);
   const qmFicou = arrSavedItems.filter((item) => item.id !== id);
   saveCartItems(qmFicou);
+
+  const totalPrice = qmFicou.reduce((acc, curr) => curr.price + acc, 0);
+  updateTotalPrice(totalPrice);
 };
 
 /**
@@ -69,17 +77,12 @@ const cartItemElement = 'ol.cart__items';
 const createTotalPriceElement = () => {
   const p = document.createElement('p');
   p.className = 'total-price';
-  p.innerText = 'Total:';
-  const cart = document.querySelector('section.cart');
-  cart.appendChild(p);
+  p.innerText = 'Total: 0';
+  const sectionCart = document.querySelector('section.cart');
+  sectionCart.appendChild(p);
   return p;
 };
 createTotalPriceElement();
-
-const totalPrice = () => {
-  const liPrice = document.querySelectorAll('li.cart__item');
-  console.log(liPrice);
-};
 
 const addCartItem = async (event) => { 
   const elementId = event.target.parentNode.querySelector('span.item_id');
@@ -92,7 +95,8 @@ const addCartItem = async (event) => {
   arrSavedItems.push({ id: result.id, title: result.title, price: result.price });
   saveCartItems(arrSavedItems);
 
-  totalPrice();
+  const totalPrice = arrSavedItems.reduce((acc, curr) => curr.price + acc, 0);
+  updateTotalPrice(totalPrice);
 };
 
 const setCartItemsByLocalStorage = () => {
@@ -102,6 +106,9 @@ const setCartItemsByLocalStorage = () => {
   arrSavedItems.forEach((item) => {
     cartItems3.appendChild(createCartItemElement(item));
   });
+
+  const totalPrice = arrSavedItems.reduce((acc, curr) => curr.price + acc, 0);
+  updateTotalPrice(totalPrice);
 };
 setCartItemsByLocalStorage();
 
@@ -142,6 +149,7 @@ const emptyCart = () => {
   liCartItems.forEach((li) => li.remove());
 
   saveCartItems([]);
+  updateTotalPrice(0);
 };
 const btnEmptyCart = document.querySelector('.empty-cart');
 btnEmptyCart.addEventListener('click', emptyCart);
