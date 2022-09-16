@@ -79,6 +79,12 @@ body {
   width: 100%;
 }
 
+.container .loading {
+  position: absolute;
+  display: flex;
+  align-items: center;
+}
+
 .title strong {
   color: white;
 }

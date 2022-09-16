@@ -84,7 +84,7 @@ const createTotalPriceElement = () => {
   sectionCart.appendChild(pTotal);
   sectionCart.appendChild(pPrice);
 };
-createTotalPriceElement();
+// createTotalPriceElement();
 
 const addCartItem = async (event) => { 
   const elementId = event.target.parentNode.querySelector('span.item_id');
@@ -112,7 +112,7 @@ const setCartItemsByLocalStorage = () => {
   const totalPrice = arrSavedItems.reduce((acc, curr) => curr.price + acc, 0);
   updateTotalPrice(totalPrice);
 };
-setCartItemsByLocalStorage();
+// setCartItemsByLocalStorage();
 
 /**
  * Função responsável por criar e retornar o elemento do produto.
@@ -177,4 +177,6 @@ window.onload = async () => {
   showLoading();
   await createProductItem();
   removeLoading();
+  createTotalPriceElement();
+  setCartItemsByLocalStorage();
  };
