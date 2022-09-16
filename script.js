@@ -39,7 +39,7 @@ const getSavedCartItem = () => {
 
 const updateTotalPrice = (totalPrice) => {
   const price = document.querySelector('p.total-price');
-  price.innerText = `Total: R$${totalPrice.toLocaleString('pt-br', { minimumFractionDigits: 2 })}`;
+  price.innerText = `${totalPrice}`;
 };
 
 const removeCartItem = (event) => {
@@ -75,12 +75,14 @@ const removeCartItem = (event) => {
 const cartItemElement = 'ol.cart__items';
 
 const createTotalPriceElement = () => {
-  const p = document.createElement('p');
-  p.className = 'total-price';
-  p.innerText = 'Total: 0';
+  const pTotal = document.createElement('p');
+  pTotal.innerText = 'Subtotal: ';
+  const pPrice = document.createElement('p');
+  pPrice.className = 'total-price';
+  pPrice.innerText = '0';
   const sectionCart = document.querySelector('section.cart');
-  sectionCart.appendChild(p);
-  return p;
+  sectionCart.appendChild(pTotal);
+  sectionCart.appendChild(pPrice);
 };
 createTotalPriceElement();
 
