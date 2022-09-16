@@ -64,24 +64,43 @@ const removeCartItem = (event) => {
   return li;
 };
 
+const cartItemElement = 'ol.cart__items';
+
+const createTotalPriceElement = () => {
+  const p = document.createElement('p');
+  p.className = 'total-price';
+  p.innerText = 'Total:';
+  const cart = document.querySelector('section.cart');
+  cart.appendChild(p);
+  return p;
+};
+createTotalPriceElement();
+
+const totalPrice = () => {
+  const liPrice = document.querySelectorAll('li.cart__item');
+  console.log(liPrice);
+};
+
 const addCartItem = async (event) => { 
   const elementId = event.target.parentNode.querySelector('span.item_id');
   const result = await fetchItem(elementId.innerText);
-  const cartItems = document.querySelector('ol.cart__items');
-  cartItems.appendChild(createCartItemElement(result));
+  const cartItems1 = document.querySelector(cartItemElement);
+  cartItems1.appendChild(createCartItemElement(result));
 
   const savedItems = getSavedCartItem();
   const arrSavedItems = JSON.parse(savedItems);
   arrSavedItems.push({ id: result.id, title: result.title, price: result.price });
   saveCartItems(arrSavedItems);
+
+  totalPrice();
 };
 
 const setCartItemsByLocalStorage = () => {
-  const cartItems = document.querySelector('ol.cart__items');
+  const cartItems3 = document.querySelector('ol.cart__items');
   const savedItems = getSavedCartItem();
   const arrSavedItems = JSON.parse(savedItems);
   arrSavedItems.forEach((item) => {
-    cartItems.appendChild(createCartItemElement(item));
+    cartItems3.appendChild(createCartItemElement(item));
   });
 };
 setCartItemsByLocalStorage();
@@ -94,7 +113,7 @@ setCartItemsByLocalStorage();
  * @param {string} product.thumbnail - URL da imagem do produto.
  * @returns {Element} Elemento de produto.
  */
-const createProductItemElement = ({ id, title, thumbnail }) => {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -106,7 +125,7 @@ const createProductItemElement = ({ id, title, thumbnail }) => {
   section.appendChild(btnAddCart);
 
   return section;
-};
+}
 
 const createProductItem = async () => { 
   const resultComputer = await fetchProducts('computador');
@@ -117,6 +136,15 @@ const createProductItem = async () => {
   });
 };
 createProductItem();
+
+const emptyCart = () => {
+  const liCartItems = document.querySelectorAll('li.cart__item');
+  liCartItems.forEach((li) => li.remove());
+
+  saveCartItems([]);
+};
+const btnEmptyCart = document.querySelector('.empty-cart');
+btnEmptyCart.addEventListener('click', emptyCart);
 
 /**
  * Função que recupera o ID do produto passado como parâmetro.

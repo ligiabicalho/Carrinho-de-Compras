@@ -15,9 +15,4 @@ describe('4 - Teste a função getSavedCartItems', () => {
     expect(localStorage.getItem).toHaveBeenCalledWith('cartItems');
   })
 
-  it('ao executar getSavedCartItems, retorna o que está salvo no Local Storage',  () => {
-    saveCartItems('teste');
-    expect(getSavedCartItems()).toEqual('');
-  })
-
 });
