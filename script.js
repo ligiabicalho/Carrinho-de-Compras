@@ -144,7 +144,7 @@ const createProductItem = async () => {
     sectionItems.appendChild(productItemElement);
   });
 };
-createProductItem();
+// createProductItem();
 
 const emptyCart = () => {
   const liCartItems = document.querySelectorAll('li.cart__item');
@@ -156,6 +156,16 @@ const emptyCart = () => {
 const btnEmptyCart = document.querySelector('.empty-cart');
 btnEmptyCart.addEventListener('click', emptyCart);
 
+const showLoading = () => {
+  const sectionContainer = document.querySelector('section.container');
+  sectionContainer.appendChild(createCustomElement('p', 'loading', 'carregando...'));
+};
+
+const removeLoading = () => {
+  const loading = document.querySelector('p.loading');
+  loading.remove();
+};
+
 /**
  * Função que recupera o ID do produto passado como parâmetro.
  * @param {Element} product - Elemento do produto.
@@ -163,4 +173,8 @@ btnEmptyCart.addEventListener('click', emptyCart);
  */
 // const getIdFromProductItem = (product) => product.querySelector('span.id').innerText;
 
-window.onload = () => { };
+window.onload = async () => {
+  showLoading();
+  await createProductItem();
+  removeLoading();
+ };
